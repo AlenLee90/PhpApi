@@ -20,3 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => '/cooper'], function () {  
     Route::resource('user', 'UserController');
 });
+
+Route::post('login', 'PassportController@login');
+Route::post('register', 'PassportController@register');
+Route::get('details', 'PassportController@getDetails');
+
+/*
+Route::group(['middleware' => 'auth:api'], function(){
+	Route::get('details', 'PassportController@getDetails');
+});
+*/
