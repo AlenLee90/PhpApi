@@ -41,7 +41,7 @@ class PassportController extends ApiController
         }
         else{
             //return response()->json(['error'=>'Unauthorised'], 401);
-			return $this->setStatusCode(402)->tokenUnauthorised();
+			return $this->setStatusCode(401)->tokenUnauthorised();
         }
     }
 
@@ -61,7 +61,7 @@ class PassportController extends ApiController
 
         if ($validator->fails()) {
             //return response()->json(['error'=>$validator->errors()], 401);
-			return $this->setStatusCode(401)->validatorFails();            
+			return $this->setStatusCode(402)->validatorFails();            
         }
 
         $input = $request->all();
