@@ -31,6 +31,16 @@ class ApiController extends Controller
     {
        return $this->setStatusCode(404)->responseError($message);
     }
+	
+	public function validatorFails($message = 'Validator Failed')
+    {
+       return $this->setStatusCode(401)->responseError($message);
+    }
+	
+	public function tokenUnauthorised($message = 'Unauthorised')
+    {
+       return $this->setStatusCode(402)->responseError($message);
+    }
 
     public function responseError($message)
     {
