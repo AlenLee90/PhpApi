@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Transformer\UserTransformer;
+use Illuminate\Support\Facades\DB;
 
 class PassportController extends ApiController
 {
@@ -85,16 +86,24 @@ class PassportController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function getDetails()
+    /*
+	public function getDetails()
     {
         $user = Auth::user();
-        //return response()->json(['success' => $user], $this->successStatus);
+		$date = date("Y-m-d")."%";
+		$results = DB::table('input_details')
+						->where([
+							['delete_flag', '=', '0'],
+							['created_at', 'like', $date],
+						])
+						->get();
         return $this->response(
             [
                 'status' => 'success',
 				'status_code' => $this->getStatusCode(),
-                'data' => $this->userTransformer->transform($user)
+                'data' => $results
             ]
         );
     }
+	*/
 }

@@ -28,5 +28,5 @@ Route::post('details', 'PassportController@getDetails');
 */
 
 Route::group(['middleware' => 'auth:api'], function(){
-	Route::post('details', 'PassportController@getDetails');
+	Route::post('getViewDatas', 'ViewController@getViewDatas');
 });
