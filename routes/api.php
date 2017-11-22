@@ -30,3 +30,11 @@ Route::post('details', 'PassportController@getDetails');
 Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('getViewDatas', 'ViewController@getViewDatas');
 });
+
+Route::group(['middleware' => 'auth:api'], function(){
+	Route::post('getViewDetail', 'ViewController@getViewDetail');
+});
+
+Route::group(['middleware' => 'auth:api'], function(){
+	Route::post('deleteViewData', 'ViewController@deleteViewData');
+});

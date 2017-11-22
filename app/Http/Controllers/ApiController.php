@@ -41,6 +41,11 @@ class ApiController extends Controller
     {
        return $this->setStatusCode(401)->responseError($message);
     }
+	
+	public function queryFails($message = 'Query Excute Failed')
+    {
+       return $this->setStatusCode(101)->responseError($message);
+    }
 
     public function responseError($message)
     {
