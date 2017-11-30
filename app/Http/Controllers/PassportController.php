@@ -28,7 +28,7 @@ class PassportController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function login(){
-        if(Auth::attempt(['account' => request('account'),'password' => request('password'),'email' => request('email')])){
+        if(Auth::attempt(['name' => request('name'),'password' => request('password'),'email' => request('email')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             //return response()->json(['success' => $success], $this->successStatus);
@@ -54,7 +54,7 @@ class PassportController extends ApiController
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'account' => 'required',
+            'name' => 'required',
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
@@ -69,7 +69,7 @@ class PassportController extends ApiController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         //$success['token'] =  $user->createToken('MyApp')->accessToken
-        $success['account'] =  $user->account;
+        $success['name'] =  $user->name;
 
         //return response()->json(['success'=>$success], $this->successStatus);
 		return $this->response(
