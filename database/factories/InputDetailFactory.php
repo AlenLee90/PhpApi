@@ -16,6 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(App\InputDetail::class, function (Faker $faker) {
 
     return [
+		'user_id' => $faker->numberBetween($min = 1, $max = 5) ,
         'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000),
         'category_id' => $faker->numberBetween($min = 1, $max = 3) ,
 		'consumption_flag' => $faker->numberBetween($min = 0, $max = 1) ,

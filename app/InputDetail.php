@@ -8,13 +8,14 @@ use App\InputDetail;
 
 class InputDetail extends Model
 {
-    public static function getViewTableDatas($date){
+    public static function getViewTableDatas($date,$userId){
 		$results;
 		try{
 			$results = DB::table('input_details')
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
+					['user_id', '=', $userId],
 				])
 				->get();
 		}catch(Exception $e){
@@ -23,13 +24,14 @@ class InputDetail extends Model
 		return $results;
 	}
 	
-	public static function getViewTableDetail($id){
+	public static function getViewTableDetail($id,$userId){
 		$results;
 		try{
 			$results = DB::table('input_details')
 				->where([
 					['delete_flag', '=', '0'],
 					['id', '=', $id],
+					['user_id', '=', $userId],
 				])
 				->get();	
 		}catch(Exception $e){
@@ -50,15 +52,16 @@ class InputDetail extends Model
 		return $status;
 	}
 	
-	public static function getSumPayments($date){
+	public static function getSumPayments($date,$userId){
 		$results;
 		try{
 			$results = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
 					['consumption_flag', '=', '0'],
+					['user_id', '=', $userId],
 				])
 				->get();	
 		}catch(Exception $e){
@@ -71,7 +74,7 @@ class InputDetail extends Model
 		$results;
 		try{
 			$results = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount,category_id'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount,category_id'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
@@ -85,15 +88,16 @@ class InputDetail extends Model
 		return $results;
 	}
 	
-	public static function getSumIncomes($date){
+	public static function getSumIncomes($date,$userId){
 		$results;
 		try{
 			$results = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
 					['consumption_flag', '=', '1'],
+					['user_id', '=', $userId],
 				])
 				->get();	
 		}catch(Exception $e){
@@ -106,7 +110,7 @@ class InputDetail extends Model
 		$results;
 		try{
 			$results = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount,category_id'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount,category_id'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
@@ -120,25 +124,27 @@ class InputDetail extends Model
 		return $results;
 	}
 	
-	public static function getRec14DaysDatas($date){
+	public static function getRec14DaysDatas($date,$userId){
 		$results = [];
 		$date = date("Y-m-d", strtotime($date." - 13 days"));
 		for ($x = 0; $x <= 13; $x++) {
 		try{
 			$payments = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date."%"],
 					['consumption_flag', '=', '0'],
+					['user_id', '=', $userId],
 				])
 				->get();
 			$incomes = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
 					['consumption_flag', '=', '0'],
+					['user_id', '=', $userId],
 				])
 				->get();
 			$currentDayResult = ($payments->first()->amount) - ($incomes->first()->amount);
@@ -151,25 +157,27 @@ class InputDetail extends Model
 		return $results;
 	}
 	
-	public static function getRec3MonsDatas($date){
+	public static function getRec3MonsDatas($date,$userId){
 		$results = [];
 		$date = date("Y-m", strtotime($date." - 2 months"));
 		for ($x = 0; $x <= 2; $x++) {
 		try{
 			$payments = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date."%"],
 					['consumption_flag', '=', '0'],
+					['user_id', '=', $userId],
 				])
 				->get();
 			$incomes = DB::table('input_details')
-				->select(DB::raw('SUM(amount) as amount'))
+				->select(DB::raw('ifnull(SUM(amount),0) as amount'))
 				->where([
 					['delete_flag', '=', '0'],
 					['created_at', 'like', $date],
 					['consumption_flag', '=', '0'],
+					['user_id', '=', $userId],
 				])
 				->get();
 			$monthlyResult = ($payments->first()->amount) - ($incomes->first()->amount);
@@ -191,6 +199,7 @@ class InputDetail extends Model
 			}else{
 				$inputDetail = new InputDetail;	
 			}
+			$inputDetail->user_id = $request->user_id;
 			$inputDetail->amount = $request->amount;
 			$inputDetail->category_id = $request->category_id;
 			$inputDetail->currency_id = $request->currency_id;

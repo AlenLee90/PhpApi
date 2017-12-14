@@ -14,7 +14,8 @@ class ViewController extends ApiController
     {	
         $user = Auth::user();
 		$date = ($request->input('date'))."%";
-		$results = InputDetail::getViewTableDatas($date);
+		$userId = $request->input('user_id');
+		$results = InputDetail::getViewTableDatas($date,$userId);
         return $this->response(
             [
                 'status' => 'success',
@@ -27,7 +28,7 @@ class ViewController extends ApiController
 	public function getViewDetail(Request $request)
     {	
         $user = Auth::user();
-		$results = InputDetail::getViewTableDetail($request->input('id'));
+		$results = InputDetail::getViewTableDetail($request->input('id'),$request->input('user_id'));
         return $this->response(
             [
                 'status' => 'success',
@@ -98,8 +99,9 @@ class ViewController extends ApiController
     {	
         $user = Auth::user();
 		$date = ($request->input('date'))."%";
-		$paymentResults = InputDetail::getSumPayments($date);
-		$incomeResults = InputDetail::getSumIncomes($date);
+		$userId = $request->input('user_id');
+		$paymentResults = InputDetail::getSumPayments($date,$userId);
+		$incomeResults = InputDetail::getSumIncomes($date,$userId);
 		$todaySum = ($paymentResults->first()->amount) - ($incomeResults->first()->amount);
 		$todaySum = sprintf('%0.2f', $todaySum);
 		$results = array('paymentSum' => $paymentResults->first()->amount, 'incomeSum' => $incomeResults->first()->amount, 'resultSum' => (double)$todaySum);
@@ -116,7 +118,8 @@ class ViewController extends ApiController
     {	
         $user = Auth::user();
 		$date = ($request->input('date'));
-		$results = InputDetail::getRec14DaysDatas($date);
+		$userId = $request->input('user_id');
+		$results = InputDetail::getRec14DaysDatas($date,$userId);
         return $this->response(
             [
                 'status' => 'success',
@@ -130,7 +133,8 @@ class ViewController extends ApiController
     {	
         $user = Auth::user();
 		$date = ($request->input('date'));
-		$results = InputDetail::getRec3MonsDatas($date);
+		$userId = $request->input('user_id');
+		$results = InputDetail::getRec3MonsDatas($date,$userId);
         return $this->response(
             [
                 'status' => 'success',

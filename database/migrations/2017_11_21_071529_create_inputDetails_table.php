@@ -15,6 +15,7 @@ class CreateInputDetailsTable extends Migration
     {
         Schema::create('input_details', function (Blueprint $table) {
             $table->increments('id');
+			$table->integer('user_id');
 			$table->double('amount');
 			$table->integer('category_id');
 			$table->integer('consumption_flag');
